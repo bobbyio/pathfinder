@@ -29,7 +29,7 @@ database-admin-password: root
 
 database-admin-user: root
 
-dbhostname:mongodb: localhost
+dbhostname:mongodb: mongodb
 
 spring:
     devtools:

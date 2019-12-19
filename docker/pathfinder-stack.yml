@@ -1,0 +1,23 @@
+version: '2'
+services:
+  mongodb:
+    image: biranio/mongo:dockerv1
+    container_name: mongodb
+    ports:
+    - 27017:27017
+    - 27018:27018
+    - 27019:27019
+  pathfinder-ui:
+    image: biranio/pathfinder-ui:dockerv1
+    container_name: pathfinder-ui
+    ports:
+    - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev" 
+      - PATHFINDER_SELF=http://localhost:8080
+      - PATHFINDER_SERVER=http://pathfinder-server:8080
+  pathfinder-server:
+    image: biranio/pathfinder-server:dockerv1
+    container_name: pathfinder-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
