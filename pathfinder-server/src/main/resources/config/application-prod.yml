@@ -19,6 +19,18 @@ logging:
         com.redhat.gps.pathfinder: INFO
         io.github.jhipster: INFO
 
+database-user: user
+
+database-password: password
+
+database-name: pathfinder
+
+database-admin-password: root
+
+database-admin-user: root
+
+dbhostname:mongodb: localhost
+
 spring:
     devtools:
         restart:
@@ -27,7 +39,7 @@ spring:
             enabled: false
     data:
         mongodb:
-            uri: mongodb://localhost:27017
+            uri: localhost:27017
             database: pathfinder
     mail:
         host: localhost
@@ -39,7 +51,7 @@ spring:
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
-# keytool -genkey -alias pathfinder -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias pathfind'database-userer -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -69,37 +81,6 @@ server:
 # Full reference is available at: http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-jhipster:
-    http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
-        cache: # Used by the CachingHttpHeadersFilter
-            timeToLiveInDays: 1461
-    security:
-        remember-me:
-            # security key (this key should be unique for your application, and kept secret)
-            key: 7a7a6807176c6b84f48facc54b1ce34821456b40
-    mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: pathfinder@localhost
-        base-url: http://my-server-url-to-change # Modify according to your server's URL
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite:
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: pathfinder
-        prometheus:
-            enabled: false
-            endpoint: /prometheusMetrics
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            report-frequency: 60 # in seconds
-    logging:
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
 
 
 # ===================================================================
