@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: pathfinder
+objects:
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: pathfinder-ui
+      namespace: default
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: pathfinder-ui
+        spec:
+          containers:
+            - name: pathfinder-ui
+              image: biranio/pathfinder-ui:dockerv1
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: "dev"
+                - name: PATHFINDER_SELF
+                  value: "."
+                - name: PATHFINDER_SERVER
+                  value: "http://pathfinder-server:8080"
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: pathfinder-ui
+    spec:
+      ports:
+        - port: 8080
+          protocol: TCP
+          targetPort: 8080
+          name: "8080"
+      selector:
+        app: pathfinder-ui
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: pathfinder-server
+      namespace: default
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: pathfinder-server
+        spec:
+          containers:
+            - name: pathfinder-server
+              image: biranio/pathfinder-server:dockerv1
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: "prod"
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: pathfinder-server
+    spec:
+      ports:
+        - port: 8080
+          protocol: TCP
+          targetPort: 8080
+          name: "8080"
+      selector:
+        app: pathfinder-server
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}   
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: mongodb
+      namespace: default
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: mongodb
+        spec:
+          containers:
+            - name: mongodb
+              image: biranio/mongo:dockerv1
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb
+    spec:
+      ports:
+        - port: 27017
+          protocol: TCP
+          targetPort: 27017
+          name: "27017"
+        - port: 27018
+          protocol: TCP
+          targetPort: 27018
+          name: "27018"
+        - port: 27019
+          protocol: TCP
+          targetPort: 27019
+          name: "27019"
+      selector:
+        app: mongodb
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      annotations:
+        openshift.io/host.generated: "true"
+      labels:
+        app: pathfinder-ui
+        application: pathfinder-ui
+      name: pathfinder-ui
+    spec:
+      path: ""
+      to:
+        kind: Service
+        name: pathfinder-ui
+        weight: 100
+      wildcardPolicy: None
